@@ -15,10 +15,15 @@ class Lighttpd < Formula
   if ARGV.include? '--with-mysql'
     depends_on 'mysql' => :recommended unless mysql_installed?
   end
+  
+  if ARGV.include? '--with-lua'
+    depends_on 'lua' => :recommended
+  end
 
   def options
    [
      ['--with-mysql', 'Include MySQL support (for mod_mysql_vhost)'],
+     ['--with-lua', 'Include Lua support (for mod_magnet)'],
    ]
   end
 
@@ -39,6 +44,11 @@ class Lighttpd < Formula
       end
       args.push "--with-mysql="+mysql_config
     end
+    
+    if ARGV.include? '--with-lua'
+      args.push "--with-lua"
+    end
+
 
     system "./configure", *args
     system "make install"
